@@ -28,4 +28,10 @@ describe ('counter', () => {
             counter(1, { type: 'DECREMENT' })
         ).toEqual(0);
     });
+
+    it('should handle unknown actions', () => {
+        expect (
+            counter(1, { type: 'SOMETHING_ELSE' })
+        ).toEqual(1);
+    });
 });
