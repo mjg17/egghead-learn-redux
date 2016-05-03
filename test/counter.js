@@ -36,4 +36,11 @@ describe ('counter', () => {
             counter(1, { type: 'SOMETHING_ELSE' })
         ).toEqual(1);
     });
+
+    it('should handle initial state', () => {
+        expect (
+            counter(undefined, { type: 'SOMETHING_ELSE' })
+        ).toEqual(0);
+    });
+
 });
