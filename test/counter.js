@@ -1,5 +1,5 @@
 import expect from 'expect';
-import counter from '../src/counter';
+import counter from '../public/lib/reducers/counter';
 
 describe ('counter', () => {
     it('should handle increment', () => {
