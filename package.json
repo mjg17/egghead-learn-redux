@@ -4,6 +4,7 @@
   "description": "egghead.io redux tutorial",
   "main": "index.js",
   "scripts": {
+    "build": "babel src -d lib",
     "test": "mocha --compilers js:babel-register"
   },
   "author": "",
