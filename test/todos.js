@@ -1,9 +1,9 @@
 import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 
-import todos from '../public/lib/reducers/todos';
+import todoApp from '../public/lib/reducers/todos';
 
-describe ('todos', () => {
+describe ('todoApp', () => {
     it('should handle add_todo', () => {
 
         const stateBefore = [];
@@ -12,57 +12,100 @@ describe ('todos', () => {
             id: 0,
             text: 'Learn Redux'
         };
-        const stateAfter = [
-            {
-                id: 0,
-                text: 'Learn Redux',
-                completed: false
-            }
-        ];
+        const stateAfter = {
+            todos: [
+                {
+                    id: 0,
+                    text: 'Learn Redux',
+                    completed: false
+                }
+            ],
+            visibilityFilter: 'SHOW_ALL'
+        };
 
         deepFreeze(stateBefore);
         deepFreeze(stateAfter);
 
         expect(
-            todos(stateBefore, action)
+            todoApp(stateBefore, action)
         ).toEqual(stateAfter);
     });
 
     it('should handle toggle_todo', () => {
-        const stateBefore = [
-            {
-                id: 0,
-                text: 'Learn Redux',
-                completed: false
-            },
-            {
-                id: 1,
-                text: 'Go shopping',
-                completed: false
-            }
-        ];
+        const stateBefore = {
+            todos: [
+                {
+                    id: 0,
+                    text: 'Learn Redux',
+                    completed: false
+                },
+                {
+                    id: 1,
+                    text: 'Go shopping',
+                    completed: false
+                }
+            ],
+            visibilityFilter: 'SHOW_COMPLETED'
+        };
         const action = {
             type: 'TOGGLE_TODO',
             id: 1
         };
-        const stateAfter = [
-            {
-                id: 0,
-                text: 'Learn Redux',
-                completed: false
-            },
-            {
-                id: 1,
-                text: 'Go shopping',
-                completed: true
-            }
-        ];
+        const stateAfter = {
+            todos: [
+                {
+                    id: 0,
+                    text: 'Learn Redux',
+                    completed: false
+                },
+                {
+                    id: 1,
+                    text: 'Go shopping',
+                    completed: true
+                }
+            ],
+            visibilityFilter: 'SHOW_COMPLETED'
+        };
 
         deepFreeze(stateBefore);
         deepFreeze(action);
 
         expect(
-            todos(stateBefore, action)
+            todoApp(stateBefore, action)
+        ).toEqual(stateAfter);
+    });
+    
+    it('should handle set_visibilytFilter', () => {
+        const stateBefore = {
+            todos: [
+                {
+                    id: 0,
+                    text: 'Learn Redux',
+                    completed: false
+                },
+            ],
+            visibilityFilter: 'SHOW_ALL'
+        };
+        const action = {
+            type: 'SET_VISIBILITY_FILTER',
+            filter: 'SHOW_COMPLETED'
+        };
+        const stateAfter = {
+            todos: [
+                {
+                    id: 0,
+                    text: 'Learn Redux',
+                    completed: false
+                },
+            ],
+            visibilityFilter: 'SHOW_COMPLETED'
+        };
+
+        deepFreeze(stateBefore);
+        deepFreeze(action);
+
+        expect(
+            todoApp(stateBefore, action)
         ).toEqual(stateAfter);
     });
 });
