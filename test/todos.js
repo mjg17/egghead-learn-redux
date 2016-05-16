@@ -6,7 +6,7 @@ import todoApp from '../public/lib/reducers/todos';
 describe ('todoApp', () => {
     it('should handle add_todo', () => {
 
-        const stateBefore = [];
+        const stateBefore = {};
         const action = {
             type: 'ADD_TODO',
             id: 0,
