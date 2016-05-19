@@ -1,0 +1,51 @@
+import todoApp from 'lib/reducers/todos';
+
+import { createStore } from 'redux';
+import React           from 'react';
+import ReactDOM        from 'react-dom';
+
+// create the store for our mini-app using the counter reducer
+const store = createStore(todoApp);
+
+const { Component } = React;
+
+let nextTodoId = 0;
+
+class TodoApp extends Component {
+  render() {
+    return (
+      <div>
+        <input ref={node => {
+          this.input = node;
+        }} />
+        <button onClick={() => {
+          store.dispatch({
+            type: 'ADD_TODO',
+            text: this.input.value,
+            id: nextTodoId++
+          });
+          this.input.value = '';
+        }}>
+          Add Todo
+        </button>
+        <ul>
+          {this.props.todos.map(todo =>
+            <li key={todo.id}>
+              {todo.text}
+            </li>
+          )}
+        </ul>
+      </div>
+    );
+  }
+}
+
+const render = () => {
+  ReactDOM.render(
+    <TodoApp todos={store.getState().todos} />,
+    document.getElementById('root')
+  );
+};
+
+store.subscribe(render); // all actions re-render the DOM
+render(); // render the initial state of the page/app
