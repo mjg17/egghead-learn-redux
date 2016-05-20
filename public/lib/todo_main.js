@@ -188,23 +188,9 @@ const TodoApp = () => (
   </div>
 );
 
-class Provider extends Component {
-    getChildContext() {
-        return {
-            store: this.props.store  
-        };
-    }
-    
-    render() {
-        return this.props.children;
-    }
-}
-Provider.childContextTypes = { // needed to turn on passing of context to children
-    store: React.PropTypes.object
-}
-
-import todoApp from 'lib/reducers/todos';
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import todoApp from 'lib/reducers/todos';
 
 ReactDOM.render(
     <Provider store={createStore(todoApp)}>
