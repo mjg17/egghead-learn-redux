@@ -143,42 +143,31 @@ const getVisibleTodos = (
   }
 }
 
-class VisibleTodoList extends Component {
+const mapStateToProps = (state) => {
+    return {
+        todos: getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+        )
+    };
+};
 
-    componentDidMount() {
-        const { store } = this.context;
-        this.unsubscribe = store.subscribe(() => this.forceUpdate());
-    }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onTodoClick: (id) => {
+            dispatch({
+                type: 'TOGGLE_TODO',
+                id
+            })
+        }
+    };
+};
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    render() {
-        const { store } = this.context;
-        const state = store.getState();
-
-        return (
-            <TodoList
-                todos={
-                    getVisibleTodos(
-                        state.todos,
-                        state.visibilityFilter
-                    )
-                }
-                onTodoClick={
-                    id => store.dispatch({
-                            type: 'TOGGLE_TODO',
-                            id
-                          })
-                }
-            />
-        );
-    }
-}
-VisibleTodoList.contextTypes = { // needed to turn on receiving of context
-    store: React.PropTypes.object
-}
+import { connect } from 'react-redux';
+const VisibleTodoList = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TodoList);
 
 const TodoApp = () => (
   <div>
