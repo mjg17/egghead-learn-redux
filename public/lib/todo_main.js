@@ -88,7 +88,7 @@ const TodoList = ({
 )
 
 let nextTodoId = 0;
-const AddTodo = (props, { store }) => { // second arg is context
+let AddTodo = ({ dispatch }) => { // second arg is context
     let input;
     return (
         <div>
@@ -97,7 +97,7 @@ const AddTodo = (props, { store }) => { // second arg is context
         }} />
         <button
             onClick={() => {
-                store.dispatch({
+                dispatch({
                     type: 'ADD_TODO',
                     text: input.value,
                     id:   nextTodoId++
@@ -109,9 +109,10 @@ const AddTodo = (props, { store }) => { // second arg is context
         </div>
     );
 }
-AddTodo.contextTypes = {
-    store: React.PropTypes.object
-}
+AddTodo = connect(              // could just write this as connect() since both args are null.
+    null,
+    null  // just inject dispatch function as a prop
+)(AddTodo);
 
 const FilterFooter = () => (
     <p>
@@ -143,7 +144,11 @@ const getVisibleTodos = (
   }
 }
 
-const mapStateToProps = (state) => {
+import { connect } from 'react-redux';
+
+const mapStateToTodoListProps = (
+    state
+) => {
     return {
         todos: getVisibleTodos(
             state.todos,
@@ -151,8 +156,9 @@ const mapStateToProps = (state) => {
         )
     };
 };
-
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToTodoListProps = (
+    dispatch
+) => {
     return {
         onTodoClick: (id) => {
             dispatch({
@@ -162,11 +168,9 @@ const mapDispatchToProps = (dispatch) => {
         }
     };
 };
-
-import { connect } from 'react-redux';
 const VisibleTodoList = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToTodoListProps,
+    mapDispatchToTodoListProps
 )(TodoList);
 
 const TodoApp = () => (
