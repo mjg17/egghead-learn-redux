@@ -25,6 +25,7 @@ const Link = ({
 };
 
 import { connect } from 'react-redux';
+import { setVisibilityFilter } from 'lib/actions/todos';
 
 const mapStateToLinkProps = (
     state,
@@ -40,10 +41,7 @@ const mapDispatchToLinkProps = (
 ) => {
     return {
         onClick: () => {
-            dispatch({
-                type:   'SET_VISIBILITY_FILTER',
-                filter: ownProps.filter
-            })
+            dispatch(setVisibilityFilter(ownProps.filter));
         }
     };
 };
@@ -80,7 +78,7 @@ const TodoList = ({
     </ul>
 )
 
-let nextTodoId = 0;
+import { addTodo } from 'lib/actions/todos';
 let AddTodo = ({ dispatch }) => { // second arg is context
     let input;
     return (
@@ -90,11 +88,7 @@ let AddTodo = ({ dispatch }) => { // second arg is context
         }} />
         <button
             onClick={() => {
-                dispatch({
-                    type: 'ADD_TODO',
-                    text: input.value,
-                    id:   nextTodoId++
-                });
+                dispatch(addTodo(input.value));
                 input.value = '';
             }}>
           Add Todo
@@ -137,6 +131,7 @@ const getVisibleTodos = (
   }
 }
 
+import { toggleTodo } from 'lib/actions/todos';
 const mapStateToTodoListProps = (
     state
 ) => {
@@ -152,10 +147,7 @@ const mapDispatchToTodoListProps = (
 ) => {
     return {
         onTodoClick: (id) => {
-            dispatch({
-                type: 'TOGGLE_TODO',
-                id
-            })
+            dispatch(toggleTodo(id));
         }
     };
 };
