@@ -24,40 +24,33 @@ const Link = ({
   );
 };
 
-class FilterLink extends Component {
+import { connect } from 'react-redux';
 
-    componentDidMount() {
-        const { store } = this.context;
-        this.unsubscribe = store.subscribe(() => this.forceUpdate());
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    render() {
-        const props = this.props;
-        const { store } = this.context;
-        const state = store.getState();
-
-        return (
-            <Link
-                active={state.visibilityFilter === props.filter}
-                onClick={() =>
-                    store.dispatch({
-                        type:   'SET_VISIBILITY_FILTER',
-                        filter: props.filter
-                    })
-                }
-             >
-                {props.children}
-            </Link>
-        );
-    }
-}
-FilterLink.contextTypes = {
-    store: React.PropTypes.object
-}
+const mapStateToLinkProps = (
+    state,
+    ownProps
+) => {
+    return {
+        active: state.visibilityFilter === ownProps.filter
+    };
+};
+const mapDispatchToLinkProps = (
+    dispatch,
+    ownProps
+) => {
+    return {
+        onClick: () => {
+            dispatch({
+                type:   'SET_VISIBILITY_FILTER',
+                filter: ownProps.filter
+            })
+        }
+    };
+};
+const FilterLink = connect(
+    mapStateToLinkProps,
+    mapDispatchToLinkProps
+)(Link);
 
 const Todo = ({
     onClick,
@@ -143,8 +136,6 @@ const getVisibleTodos = (
       );
   }
 }
-
-import { connect } from 'react-redux';
 
 const mapStateToTodoListProps = (
     state
